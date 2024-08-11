@@ -1,0 +1,54 @@
+template <typename T>
+class UniquePtr : public BaseSmartPtr<T>
+{
+public:
+    UniquePtr() : BaseSmartPtr<T>() {}
+
+    UniquePtr(T *ptr) : BaseSmartPtr<T>(ptr)
+    {
+        std::cout << " T* constructor of UniquePtr" << std::endl;
+    }
+
+    ~UniquePtr()
+    {
+        if (this->_ptr != nullptr)
+        {
+            std::cout << " destructor of UniquePtr and delete corresponding source." << std::endl;
+            this->DeletePtr();
+        }
+    }
+
+    // copy constructor and operator = are deleted to avoid copy
+    UniquePtr(const UniquePtr<T> &other) = delete;
+    UniquePtr &operator=(const UniquePtr<T> &other) = delete;
+
+    UniquePtr(UniquePtr<T> &&other) : BaseSmartPtr<T>(other._ptr)
+    {
+        std::cout << "move destructor of UniquePtr." << std::endl;
+        other._ptr = nullptr;
+    }
+
+    UniquePtr &operator=(UniquePtr<T> &&other) noexcept
+    {
+        std::cout << "move operator = of UniquePtr" << std::endl;
+        if (this != &other)
+        {
+            if (this->_ptr != nullptr)
+                this->DeletePtr();
+            this->_ptr = other._ptr;
+            other._ptr = nullptr;
+        }
+
+        return *this;
+    }
+
+    void reset(T *ptr = nullptr)
+    {
+        if (this->_ptr != ptr)
+        {
+            if (this->_ptr != nullptr)
+                this->DeletePtr();
+            this->_ptr = ptr;
+        }
+    }
+};
