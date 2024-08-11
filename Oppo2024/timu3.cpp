@@ -2,6 +2,11 @@
 #include <string>
 using namespace std;
 
+/*
+    给一个字符串str(最长为1e5)和两个int类整数x和y；
+    请把str拆成str1和str2，使得str1组成的数字能被x整除，str2组成的数字能被y整除，如果找到不，输出-1。
+*/
+
 bool canBeDevided(const string s, int startIdx, int endIdx, const int devider)
 {
     int Yu = 0;
