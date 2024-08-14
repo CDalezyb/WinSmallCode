@@ -34,7 +34,7 @@ int main()
     int x, y;
     cin >> x >> y;
 
-    int xYu = 0, yYu = 0;
+    int xYu = 0;
     int cur = 0; // [0,cur] [cur+1,lenght+1]
 
     bool find = false;
