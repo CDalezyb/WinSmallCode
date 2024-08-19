@@ -9,69 +9,116 @@
 #include <deque>
 using namespace std;
 
-bool isSpecialArray(const unordered_map<int, int> Count)
-{
-    if (Count.size() != 2)
-        return false;
+/*
+给你一个数组，求满足以下条件的子数组：
+长度至少为3，恰好出现两种数字，其中一个数字出现1次
+*/
 
-    
-    int one = 0, plusone = 0;
-    bool error = false;
-    for (auto it : Count)
+int FindABB(const vector<int> &nums)
+{
+    int count = 0;
+    for (int i = 0; i + 2 <= nums.size() - 1; i++)
     {
-        if (it.second == 1)
-            one++;
-        else if (it.second > 1)
-            plusone++;
-        else
-            return false;
+        int A = nums[i];
+        int B = nums[i + 1];
+        if (B == A)
+            continue;
+        for (int j = i + 2; j <= nums.size() - 1; j++)
+        {
+            if (nums[j] == B)
+                count++;
+            else
+                break;
+        }
+    }
+    return count;
+}
+
+int FindBBA(const vector<int> &nums)
+{
+    int count = 0;
+
+    for (int i = nums.size() - 1; i - 2 >= 0; i--)
+    {
+        int A = nums[i];
+        int B = nums[i - 1];
+        if (B == A)
+            continue;
+        for (int j = i - 2; j >= 0; j--)
+        {
+            if (nums[j] == B)
+                count++;
+            else
+                break;
+        }
     }
 
-    if (one == 1 && plusone == 1)
-        return true;
+    return count;
+}
 
-    return false;
+int FindBAB(const vector<int> &nums)
+{
+    int count = 0;
+
+    for (int i = 1; i + 1 <= nums.size() - 1; i++)
+    {
+        int A = nums[i];
+        int B1 = nums[i - 1];
+        int B2 = nums[i + 1];
+        if (B1 != B2)
+            continue;
+        if (A == B1)
+            continue;
+
+        int left = 1, right = 1;
+        int B = B1;
+
+        for (int j = i - 2; j >= 0; j--)
+        {
+            if (nums[j] == B)
+                left++;
+            else
+                break;
+        }
+
+        for (int j = i + 2; j <= nums.size() - 1; j++)
+        {
+            if (nums[j] == B)
+                right++;
+            else
+                break;
+        }
+
+        count += left * right;
+    }
+
+    return count;
 }
 
 int main()
 {
     int n;
-    cin >> n;
-    // n = 6;
-    vector<int> nums(n, 0);
-
-    for (int i = 0; i < n; i++)
-        cin >> nums[i];
-
-    // nums = {1, 1, 4, 5, 1, 4};
-
-    // int a, b, c;
-    int ans = 0;
-
-    deque<int> dq;
-    vector<vector<bool>> rec(n, vector<bool>(n, false));
-    for (int i = 0; i < n; i++)
+    vector<int> nums;
+    bool debug = true;
+    // debug = false;
+    if (debug)
     {
-        for (int j = i + 2; j < n; j++)
-        {
-            if (j > i + 2 && rec[i][j - 1] == false)
-                break;
-            unordered_map<int, int> Count;
-
-            for (int k = i; k <= j; k++)
-            {
-                Count[nums[k]]++;
-            }
-
-            if (isSpecialArray(Count))
-            {
-                rec[i][j] = true;
-                ans++;
-            }
-        }
+        n = 6;
+        nums = {1, 1, 1, 4, 5, 4, 1, 1, 1, 4, 1, 1, 1};
+    }
+    else
+    {
+        cin >> n;
+        nums.resize(n, 0);
+        for (int i = 0; i < n; i++)
+            cin >> nums[i];
     }
 
-    cout << ans << endl;
+    int c1 = FindABB(nums);
+    int c2 = FindBBA(nums);
+    int c3 = FindBAB(nums);
+    cout << c1 + c2 + c3 << endl;
+
     return 0;
 }
 // 64 位输出请用 printf("%lld")
