@@ -74,7 +74,8 @@
       "xlocbuf": "cpp",
       "xlocmes": "cpp",
       "xlocmon": "cpp",
-      "xloctime": "cpp"
+      "xloctime": "cpp",
+      "unordered_set": "cpp"
     },
     "editor.suggest.snippetsPreventQuickSuggestions": false,
     "aiXcoder.showTrayIcon": true
