@@ -11,16 +11,59 @@ int ans;
 int N, M;
 
 const int dir[4][4] = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
-void bfs(int i, int j, int &area, const vector<vector<int>> &A, vector<vector<bool>> &visited);
-void dfs(int i, int j, int &area, const vector<vector<int>> &A, vector<vector<bool>> &visited);
+
 bool isValid(const int N, const int M, int i, int j)
 {
     return i >= 0 && i < N && j >= 0 && j < M;
 }
 
+void bfs(int i, int j, int &area, const vector<vector<int>> &A, vector<vector<bool>> &visited);
+void dfs(int i, int j, int &area, const vector<vector<int>> &A, vector<vector<bool>> &visited);
+void dfs_flip(int cur_x, int cur_y, vector<vector<int>> &A)
+{
+    A[cur_x][cur_y] = 0;
+
+    for (int i = 0; i < 4; i++)
+    {
+        int try_x = cur_x + dir[i][0];
+        int try_y = cur_y + dir[i][1];
+        if (isValid(N, M, try_x, try_y) && A[try_x][try_y] == 1)
+        {
+            dfs_flip(try_x, try_y, A);
+        }
+    }
+}
+
 void solve(vector<vector<int>> &A, vector<vector<bool>> &visited)
 {
     int area = 0;
+    // step1
+    for (int i = 0; i < N; i++)
+    {
+        if (A[i][0] == 1)
+        {
+            dfs_flip(i, 0, A);
+        }
+        if (A[i][M - 1] == 1)
+        {
+            dfs_flip(i, M - 1, A);
+        }
+    }
+
+    for (int j = 0; j < M; j++)
+    {
+        if (A[0][j] == 1)
+        {
+            dfs_flip(0, j, A);
+        }
+        if (A[N - 1][j] == 1)
+        {
+            dfs_flip(N - 1, j, A);
+        }
+    }
+
+    // step2
+    ans = 0;
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < M; j++)
@@ -28,11 +71,9 @@ void solve(vector<vector<int>> &A, vector<vector<bool>> &visited)
             if (A[i][j] == 1 && visited[i][j] == false)
             {
                 area = 0;
-
                 // bfs
                 bfs(i, j, area, A, visited);
-                ans = max(area, ans);
-                
+                ans += area;
 
                 // dfs
                 // dfs(i, j, area, A, visited);
