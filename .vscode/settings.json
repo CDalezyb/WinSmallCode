@@ -78,5 +78,6 @@
       "unordered_set": "cpp"
     },
     "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "C_Cpp.intelliSenseEngine": "default",
     "aiXcoder.showTrayIcon": true
   }
